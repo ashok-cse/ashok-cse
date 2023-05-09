@@ -1,7 +1,7 @@
 ## Hi there, I'm Ashok! 👋
 
 <div align="center">
-  <a href="https://github.com/SashenJayathilaka">
+  <a href="#">
   <img height="180em" src="https://github-readme-stats.vercel.app/api?username=ashok-cse&show_icons=true&theme=radical"/>
   <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ashok-cse&layout=compact"/>
 </div>
