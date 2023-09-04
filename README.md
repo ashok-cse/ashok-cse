@@ -1,6 +1,8 @@
 ## Hi there, I'm Ashok! 👋
+![](https://komarev.com/ghpvc/?username=ashok-cse&color=green)
 
 <div align="center">
+
   <a href="#">
   <img height="180em" src="https://github-readme-stats.vercel.app/api?username=ashok-cse&show_icons=true&theme=radical"/>
   <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ashok-cse&layout=compact"/>
