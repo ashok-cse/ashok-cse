@@ -1,4 +1,4 @@
-# Hi, I'm Ashok Kumar Meena 👋
+# Hi, I'm Ashok 👋
 
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=ashok-cse&color=green" alt="Profile views" />
