@@ -1,58 +1,97 @@
-## Hi there, I'm Ashok! 👋
-![](https://komarev.com/ghpvc/?username=ashok-cse&color=green)
+# Hi, I'm Ashok Kumar Meena 👋
 
-<div align="center">
-
-  <a href="#">
-  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=ashok-cse&show_icons=true&theme=radical"/>
-  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ashok-cse&layout=compact"/>
-</div>
-  
-
-
-<div style="display: inline_block"><br>
-  <img align="center" alt="React" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg">
-   <img align="center" alt="js" height="30" width="30" src="https://user-images.githubusercontent.com/99184393/180459460-36cf25b6-8654-4795-8e0c-1b2e9a8a2070.png">
-   <img align="center" alt="" height="30" width="30" src="https://user-images.githubusercontent.com/99184393/201828007-451fcae6-d954-4fba-bb4b-06ac66e932e8.png">
-<!--   <img align="center" alt="Python" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg"> -->
-  <img align="center" alt="java" height="40" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg">
-  <img align="center" alt="Cshark" height="30" width="30" src="https://user-images.githubusercontent.com/99184393/180462270-ea4a249c-627c-4479-9431-5c3fd25454c4.png">
-  <img align="center" alt="Html" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original.svg">
-  <img align="center" alt="css" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-original.svg">
-  <img align="center" alt="js" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-plain.svg">
-    <img align="center" alt="css" height="30" width="30" src="https://user-images.githubusercontent.com/99184393/201854074-917b3994-ea11-447a-86f9-d7a9e4969f0c.png">
-  <img align="center" alt="" height="30" width="30" src="https://user-images.githubusercontent.com/99184393/201828062-d7e933ca-d921-4f07-a907-6b8e2ae4a281.png">
-  <img align="center" alt="" height="30" width="30" src="https://user-images.githubusercontent.com/99184393/177784603-d69e9d02-721a-4bce-b9b3-949165d2edeb.png">
-  <img align="center" alt="" height="30" width="30" src="https://lirp.cdn-website.com/aa0ef369/dms3rep/multi/opt/google-cloud-icon-400w.png">
-</div>
-
-  <br />
-
-<div> 
-  <a href="#" target="_blank"><img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" target="_blank"></a>
-  <a href="https://www.linkedin.com/in/ashok-cse/" target="_blank"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
- 	<a href="#" target="_blank"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" target="_blank"></a>
- <a href="#" target="_blank"><img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white" target="_blank"></a> 
-  <a href = "mailto:ashokmarmath8@gmail.com"><img src="https://img.shields.io/badge/-Gmail-%23333?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
-  
-</div>
- <hr />
-  
-
-  
-  
-<!--
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
-  <!--
-  <p align="center">
-    <img align="center" height="195px" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ashok-cse&text_color=FFFFFF&bg_color=000000&title_color=94b4a4&langs_count=15&layout=compact&hide_border=true" />
+<p align="center">
+  <img src="https://komarev.com/ghpvc/?username=ashok-cse&color=green" alt="Profile views" />
 </p>
--->
+
+<p align="center">
+  <b>Software Engineer | Full-Stack Developer | Building scalable web products</b>
+</p>
+
+<p align="center">
+  I enjoy building real-world products with clean UI, solid backend systems, and scalable architecture.
+  <br/>
+  My experience spans full-stack development, real-time applications, product engineering, and growth-focused execution.
+</p>
+
+---
+
+## About Me
+
+- Full-stack developer with strong experience in building web applications
+- Interested in scalable systems, real-time communication, and product development
+- Comfortable working across frontend, backend, databases, and cloud tools
+- Currently exploring better architecture, system design, and AI-powered products
+- Passionate about turning ideas into usable products
+
+---
+
+## Tech Stack
+
+### Languages
+<p>
+  <img alt="JavaScript" src="https://img.shields.io/badge/JavaScript-black?style=for-the-badge&logo=javascript" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-black?style=for-the-badge&logo=typescript" />
+  <img alt="Java" src="https://img.shields.io/badge/Java-black?style=for-the-badge&logo=openjdk" />
+  <img alt="PHP" src="https://img.shields.io/badge/PHP-black?style=for-the-badge&logo=php" />
+  <img alt="HTML5" src="https://img.shields.io/badge/HTML5-black?style=for-the-badge&logo=html5" />
+  <img alt="CSS3" src="https://img.shields.io/badge/CSS3-black?style=for-the-badge&logo=css3" />
+</p>
+
+### Frameworks & Libraries
+<p>
+  <img alt="React" src="https://img.shields.io/badge/React-black?style=for-the-badge&logo=react" />
+  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-black?style=for-the-badge&logo=node.js" />
+  <img alt="SvelteKit" src="https://img.shields.io/badge/SvelteKit-black?style=for-the-badge&logo=svelte" />
+  <img alt="Tailwind CSS" src="https://img.shields.io/badge/TailwindCSS-black?style=for-the-badge&logo=tailwind-css" />
+</p>
+
+### Tools & Platforms
+<p>
+  <img alt="Git" src="https://img.shields.io/badge/Git-black?style=for-the-badge&logo=git" />
+  <img alt="GitHub" src="https://img.shields.io/badge/GitHub-black?style=for-the-badge&logo=github" />
+  <img alt="Firebase" src="https://img.shields.io/badge/Firebase-black?style=for-the-badge&logo=firebase" />
+  <img alt="Google Cloud" src="https://img.shields.io/badge/Google%20Cloud-black?style=for-the-badge&logo=google-cloud" />
+  <img alt="MySQL" src="https://img.shields.io/badge/MySQL-black?style=for-the-badge&logo=mysql" />
+</p>
+
+---
+
+## GitHub Stats
+
+<p align="center">
+  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=ashok-cse&show_icons=true&theme=radical" alt="Ashok's GitHub stats" />
+  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=ashok-cse&layout=compact&theme=radical" alt="Top languages" />
+</p>
+
+---
+
+## What I Like Building
+
+- Full-stack web apps
+- Real-time communication platforms
+- Scalable backend systems
+- Clean and responsive user interfaces
+- Tools that solve practical user problems
+
+---
+
+## Connect With Me
+
+<p>
+  <a href="https://www.linkedin.com/in/ashok-cse/" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
+  </a>
+  <a href="mailto:ashokmarmath8@gmail.com">
+    <img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
+  </a>
+  <a href="https://github.com/ashok-cse" target="_blank">
+    <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" />
+  </a>
+</p>
+
+---
+
+## Profile Motto
+
+> Build useful things. Keep learning. Stay consistent.
