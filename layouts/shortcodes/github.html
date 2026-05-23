@@ -1,0 +1,177 @@
+{{- /*
+  Renders a GitHub section with:
+    1. Bold "GitHub" + total contribution count (inline)
+    2. Contribution graph (SVG via ghchart.rshah.org — no auth, no JS)
+    3. Pinned repositories (default) or all public repos, fetched at build time
+
+  Usage:
+    {{< github username="ashok-cse" >}}                 (pinned, default)
+    {{< github username="ashok-cse" mode="all" limit="12" >}}
+    {{< github username="ashok-cse" color="865d34" >}}
+
+  Notes:
+    - Pinned repos use https://pinned.berrysauce.dev (no auth).
+    - "all" mode uses the official REST API.
+    - Uses scoped CSS (Congo's prebuilt Tailwind bundle is purged).
+*/ -}}
+
+{{- $username := .Get "username" | default "ashok-cse" -}}
+{{- $mode := .Get "mode" | default "pinned" -}}
+{{- $limit := .Get "limit" | default "12" | int -}}
+{{- $color := .Get "color" | default "865d34" -}}
+
+{{- $contribAttempt := try (resources.GetRemote (printf "https://github-contributions-api.deno.dev/%s.json" $username)) -}}
+{{- $totalContrib := 0 -}}
+{{- if not $contribAttempt.Err -}}
+  {{- with $contribAttempt.Value -}}
+    {{- $data := .Content | transform.Unmarshal -}}
+    {{- $totalContrib = $data.totalContributions | default 0 -}}
+  {{- end -}}
+{{- end -}}
+
+<section class="not-prose gh-section">
+  <style>
+    .gh-section { margin: 3rem 0; max-width: 100%; }
+    .gh-section, .gh-section * { box-sizing: border-box; min-width: 0; }
+    .gh-section a { text-decoration: none; }
+
+    .gh-header { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.75rem; row-gap: 0.25rem; margin-bottom: 1rem; }
+    .gh-header h2 { font-size: 1.5rem; line-height: 1.2; font-weight: 700; margin: 0; color: rgb(var(--color-neutral-900)); }
+    .gh-header .count { font-size: 0.875rem; font-weight: 500; color: rgb(var(--color-neutral-500)); }
+
+    .gh-graph { display: block; border: 1px solid rgb(var(--color-neutral-200)); background: rgb(var(--color-neutral-50)); border-radius: 0.5rem; padding: 0.75rem; margin: 0 0 2.5rem; max-width: 100%; overflow: hidden; }
+    .gh-graph img { display: block; width: 100%; height: auto; max-width: 100%; }
+
+    .gh-repos-head { display: flex; align-items: baseline; justify-content: space-between; column-gap: 0.75rem; margin-bottom: 1rem; }
+    .gh-repos-head h3 { font-size: 1.125rem; line-height: 1.3; font-weight: 600; margin: 0; color: rgb(var(--color-neutral-900)); }
+    .gh-repos-head .link { font-size: 0.875rem; font-weight: 500; color: rgb(var(--color-primary-600)); flex-shrink: 0; white-space: nowrap; }
+    .gh-repos-head .link:hover { color: rgb(var(--color-primary-500)); text-decoration: underline; text-underline-offset: 2px; }
+
+    .gh-repos { display: grid; grid-template-columns: 1fr; gap: 0.75rem; }
+    @media (min-width: 768px) { .gh-repos { grid-template-columns: 1fr 1fr; gap: 1rem; } }
+
+    .gh-repo { display: block; border: 1px solid rgb(var(--color-neutral-200)); border-radius: 0.5rem; padding: 0.875rem 1rem; background: rgb(var(--color-neutral) / 0.5); transition: border-color .15s, box-shadow .15s; }
+    .gh-repo:hover { border-color: rgb(var(--color-primary-400)); box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+
+    .gh-repo-top { display: flex; align-items: baseline; justify-content: space-between; column-gap: 0.75rem; }
+    .gh-repo-name { flex: 1 1 auto; font-size: 0.9375rem; font-weight: 600; color: rgb(var(--color-primary-700)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .gh-repo:hover .gh-repo-name { color: rgb(var(--color-primary-600)); }
+
+    .gh-repo-lang { display: inline-flex; align-items: center; column-gap: 0.375rem; font-size: 0.75rem; color: rgb(var(--color-neutral-500)); flex-shrink: 0; white-space: nowrap; }
+    .gh-repo-lang .dot { display: inline-block; width: 0.625rem; height: 0.625rem; border-radius: 50%; flex-shrink: 0; }
+
+    .gh-repo-desc { font-size: 0.8125rem; line-height: 1.45; color: rgb(var(--color-neutral-600)); margin: 0.375rem 0 0; overflow-wrap: anywhere; }
+    .gh-repo-meta { display: flex; flex-wrap: wrap; align-items: center; column-gap: 1rem; row-gap: 0.25rem; font-size: 0.75rem; color: rgb(var(--color-neutral-500)); margin-top: 0.75rem; }
+
+    .gh-empty { font-size: 0.875rem; color: rgb(var(--color-neutral-500)); }
+
+    @media (max-width: 480px) {
+      .gh-header h2 { font-size: 1.375rem; }
+      .gh-header .count { font-size: 0.8125rem; }
+      .gh-graph { padding: 0.5rem; margin-bottom: 2rem; }
+      .gh-repo { padding: 0.75rem; }
+      .gh-repo-name { font-size: 0.9rem; }
+    }
+  </style>
+
+  <div class="gh-header">
+    <h2>GitHub</h2>
+    {{- if gt $totalContrib 0 -}}
+      <span class="count">{{ $totalContrib }} contributions in the last year</span>
+    {{- end -}}
+  </div>
+
+  <div class="gh-graph">
+    <img src="https://ghchart.rshah.org/{{ $color }}/{{ $username }}" alt="GitHub contribution graph for {{ $username }}" loading="lazy" />
+  </div>
+
+  <div class="gh-repos-head">
+    <h3>Repositories</h3>
+    <a class="link" href="https://github.com/{{ $username }}" target="_blank" rel="noopener">View on GitHub →</a>
+  </div>
+
+  {{- if eq $mode "pinned" -}}
+    {{- $api := printf "https://pinned.berrysauce.dev/get/%s" $username -}}
+    {{- $attempt := try (resources.GetRemote $api) -}}
+    {{- if $attempt.Err -}}
+      <p class="gh-empty">Couldn't load pinned repos at build time ({{ $attempt.Err }}).</p>
+    {{- else -}}
+      {{- $res := $attempt.Value -}}
+      {{- if not $res -}}
+        <p class="gh-empty">No response from pinned repos API.</p>
+      {{- else -}}
+        {{- $repos := $res.Content | transform.Unmarshal -}}
+        {{- if eq (len $repos) 0 -}}
+          <p class="gh-empty">No pinned repositories found. Pin some on your <a href="https://github.com/{{ $username }}">GitHub profile</a> to show them here.</p>
+        {{- else -}}
+          <div class="gh-repos">
+            {{- range $repos -}}
+              {{- $link := printf "https://github.com/%s/%s" .author .name -}}
+              {{- $langColor := .languageColor -}}
+              {{- if or (not $langColor) (eq $langColor "") -}}{{- $langColor = "#94a3b8" -}}{{- end -}}
+              <a class="gh-repo" href="{{ $link }}" target="_blank" rel="noopener">
+                <div class="gh-repo-top">
+                  <span class="gh-repo-name">{{ .name }}</span>
+                  {{- with .language -}}
+                    {{- if ne . "" -}}
+                      <span class="gh-repo-lang"><span class="dot" style="background:{{ $langColor }}"></span>{{ . }}</span>
+                    {{- end -}}
+                  {{- end -}}
+                </div>
+                {{- with .description -}}
+                  {{- if ne . "" -}}
+                    <p class="gh-repo-desc">{{ . }}</p>
+                  {{- end -}}
+                {{- end -}}
+                <div class="gh-repo-meta">
+                  <span title="Stars">★ {{ .stars | default 0 }}</span>
+                  <span title="Forks">⑂ {{ .forks | default 0 }}</span>
+                </div>
+              </a>
+            {{- end -}}
+          </div>
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- else -}}
+    {{- $api := printf "https://api.github.com/users/%s/repos?per_page=100&sort=updated&type=owner" $username -}}
+    {{- $attempt := try (resources.GetRemote $api) -}}
+    {{- if $attempt.Err -}}
+      <p class="gh-empty">Couldn't load repos at build time ({{ $attempt.Err }}).</p>
+    {{- else -}}
+      {{- $res := $attempt.Value -}}
+      {{- if not $res -}}
+        <p class="gh-empty">No response from GitHub.</p>
+      {{- else -}}
+        {{- $all := $res.Content | transform.Unmarshal -}}
+        {{- $repos := where (where $all "fork" false) "archived" false -}}
+        {{- if eq (len $repos) 0 -}}
+          <p class="gh-empty">No public repositories found.</p>
+        {{- else -}}
+          <div class="gh-repos">
+            {{- range first $limit $repos -}}
+              <a class="gh-repo" href="{{ .html_url }}" target="_blank" rel="noopener">
+                <div class="gh-repo-top">
+                  <span class="gh-repo-name">{{ .name }}</span>
+                  {{- with .language -}}
+                    <span class="gh-repo-lang">{{ . }}</span>
+                  {{- end -}}
+                </div>
+                {{- with .description -}}
+                  <p class="gh-repo-desc">{{ . }}</p>
+                {{- end -}}
+                <div class="gh-repo-meta">
+                  <span title="Stars">★ {{ .stargazers_count }}</span>
+                  <span title="Forks">⑂ {{ .forks_count }}</span>
+                  {{- with .pushed_at -}}
+                    <span title="Last push">Updated {{ . | dateFormat "Jan 2006" }}</span>
+                  {{- end -}}
+                </div>
+              </a>
+            {{- end -}}
+          </div>
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+</section>

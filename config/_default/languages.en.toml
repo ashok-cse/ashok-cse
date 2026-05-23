@@ -1,0 +1,24 @@
+locale = "en"
+label = "English"
+direction = "ltr"
+weight = 1
+
+title = "Ashok Kumar Meena"
+copyright = "© 2026 Ashok Kumar Meena"
+
+[params]
+  dateFormat = "2 January 2006"
+  mainSections = ["posts"]
+  description = "Ashok Kumar Meena — Full-stack software engineer in Berlin. M.Sc. Software Engineering student. Available 20 hrs/week as Werkstudent."
+
+[params.author]
+  name = "Ashok Kumar Meena"
+  image = "img/avatar.png"
+  headline = "Full-stack Software Engineer · Werkstudent in Berlin"
+  bio = "5+ years building production web products with Node.js, React, SvelteKit, Angular, PHP, Python and Java. M.Sc. Software Engineering at University of Europe for Applied Sciences, Potsdam. Available 20 hrs/week."
+  links = [
+    { email = "mailto:ashokmarmath8@gmail.com" },
+    { github = "https://github.com/ashok-cse" },
+    { linkedin = "https://linkedin.com/in/ashok-cse" },
+    { link = "https://iashok.codes/resume/" },
+  ]

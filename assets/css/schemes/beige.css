@@ -1,0 +1,44 @@
+/* Beige scheme — warm cream neutrals with walnut/coffee primary and soft terracotta secondary */
+:root {
+  /* Base surface: warm cream (used for page bg, header, cards) */
+  --color-neutral: 250, 244, 232;
+
+  /* Neutral — warm sand to deep walnut */
+  --color-neutral-50: 250, 245, 235;
+  --color-neutral-100: 244, 236, 220;
+  --color-neutral-200: 230, 218, 192;
+  --color-neutral-300: 210, 192, 158;
+  --color-neutral-400: 178, 156, 118;
+  --color-neutral-500: 138, 115, 82;
+  --color-neutral-600: 108, 88, 62;
+  --color-neutral-700: 82, 66, 46;
+  --color-neutral-800: 58, 46, 33;
+  --color-neutral-900: 38, 30, 22;
+  --color-neutral-950: 22, 17, 12;
+
+  /* Primary — walnut / coffee (links, buttons, highlights) */
+  --color-primary-50: 248, 240, 228;
+  --color-primary-100: 240, 224, 200;
+  --color-primary-200: 222, 194, 154;
+  --color-primary-300: 196, 158, 108;
+  --color-primary-400: 165, 121, 73;
+  --color-primary-500: 134, 93, 52;
+  --color-primary-600: 108, 73, 41;
+  --color-primary-700: 86, 58, 33;
+  --color-primary-800: 65, 44, 25;
+  --color-primary-900: 46, 31, 18;
+  --color-primary-950: 26, 18, 10;
+
+  /* Secondary — soft terracotta (supporting accent) */
+  --color-secondary-50: 254, 244, 235;
+  --color-secondary-100: 252, 228, 207;
+  --color-secondary-200: 248, 198, 152;
+  --color-secondary-300: 240, 162, 102;
+  --color-secondary-400: 224, 130, 70;
+  --color-secondary-500: 196, 100, 50;
+  --color-secondary-600: 166, 78, 38;
+  --color-secondary-700: 133, 62, 32;
+  --color-secondary-800: 102, 49, 26;
+  --color-secondary-900: 75, 38, 21;
+  --color-secondary-950: 45, 22, 12;
+}
