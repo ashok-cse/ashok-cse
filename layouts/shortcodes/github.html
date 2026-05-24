@@ -1,6 +1,6 @@
 {{- /*
   Renders a GitHub section with:
-    1. Bold "GitHub" + total contribution count (inline)
+    1. Bold "GitHub" + total contribution count (fetched live in the browser)
     2. Contribution graph (SVG via ghchart.rshah.org — no auth, no JS)
     3. Pinned repositories (default) or all public repos, fetched at build time
 
@@ -20,16 +20,7 @@
 {{- $limit := .Get "limit" | default "12" | int -}}
 {{- $color := .Get "color" | default "865d34" -}}
 
-{{- $contribAttempt := try (resources.GetRemote (printf "https://github-contributions-api.deno.dev/%s.json" $username)) -}}
-{{- $totalContrib := 0 -}}
-{{- if not $contribAttempt.Err -}}
-  {{- with $contribAttempt.Value -}}
-    {{- $data := .Content | transform.Unmarshal -}}
-    {{- $totalContrib = $data.totalContributions | default 0 -}}
-  {{- end -}}
-{{- end -}}
-
-<section class="not-prose gh-section">
+<section class="not-prose gh-section" data-gh-user="{{ $username }}">
   <style>
     .gh-section { margin: 3rem 0; max-width: 100%; }
     .gh-section, .gh-section * { box-sizing: border-box; min-width: 0; }
@@ -76,9 +67,7 @@
 
   <div class="gh-header">
     <h2>GitHub</h2>
-    {{- if gt $totalContrib 0 -}}
-      <span class="count">{{ $totalContrib }} contributions in the last year</span>
-    {{- end -}}
+    <span class="count gh-contrib-count" hidden></span>
   </div>
 
   <div class="gh-graph">
@@ -174,4 +163,23 @@
       {{- end -}}
     {{- end -}}
   {{- end -}}
+
+  <script>
+    (function (section) {
+      var countEl = section.querySelector(".gh-contrib-count");
+      var user = section.dataset.ghUser;
+      if (!countEl || !user) return;
+
+      fetch("https://github-contributions-api.deno.dev/" + user + ".json")
+        .then(function (res) { return res.ok ? res.json() : null; })
+        .then(function (data) {
+          var total = data && data.totalContributions;
+          if (total > 0) {
+            countEl.textContent = total + " contributions in the last year";
+            countEl.hidden = false;
+          }
+        })
+        .catch(function () {});
+    })(document.currentScript.closest(".gh-section"));
+  </script>
 </section>
