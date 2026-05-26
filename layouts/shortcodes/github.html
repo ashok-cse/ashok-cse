@@ -1,24 +1,24 @@
 {{- /*
   Renders a GitHub section with:
     1. Bold "GitHub" + total contribution count (fetched live in the browser)
-    2. Contribution graph (SVG via ghchart.rshah.org — no auth, no JS)
+    2. Contribution graph (live from github-contributions-api.deno.dev)
     3. Pinned repositories (default) or all public repos, fetched at build time
 
   Usage:
     {{< github username="ashok-cse" >}}                 (pinned, default)
     {{< github username="ashok-cse" mode="all" limit="12" >}}
-    {{< github username="ashok-cse" color="865d34" >}}
+    {{< github username="ashok-cse" >}}
 
   Notes:
     - Pinned repos use https://pinned.berrysauce.dev (no auth).
     - "all" mode uses the official REST API.
+    - Contribution graph is rendered live from github-contributions-api.deno.dev.
     - Uses scoped CSS (Congo's prebuilt Tailwind bundle is purged).
 */ -}}
 
 {{- $username := .Get "username" | default "ashok-cse" -}}
 {{- $mode := .Get "mode" | default "pinned" -}}
 {{- $limit := .Get "limit" | default "12" | int -}}
-{{- $color := .Get "color" | default "865d34" -}}
 
 <section class="not-prose gh-section" data-gh-user="{{ $username }}">
   <style>
@@ -30,8 +30,17 @@
     .gh-header h2 { font-size: 1.5rem; line-height: 1.2; font-weight: 700; margin: 0; color: rgb(var(--color-neutral-900)); }
     .gh-header .count { font-size: 0.875rem; font-weight: 500; color: rgb(var(--color-neutral-500)); }
 
-    .gh-graph { display: block; border: 1px solid rgb(var(--color-neutral-200)); background: rgb(var(--color-neutral-50)); border-radius: 0.5rem; padding: 0.75rem; margin: 0 0 2.5rem; max-width: 100%; overflow: hidden; }
-    .gh-graph img { display: block; width: 100%; height: auto; max-width: 100%; }
+    .gh-graph { border: 1px solid rgb(var(--color-neutral-200)); background: rgb(var(--color-neutral-50)); border-radius: 0.5rem; padding: 0.75rem; margin: 0 0 2.5rem; max-width: 100%; overflow-x: auto; }
+    .gh-graph-wrap { --gh-cell: 10px; --gh-gap: 3px; min-width: min(100%, 53rem); }
+    .gh-graph-months { display: grid; grid-auto-flow: column; grid-auto-columns: var(--gh-cell); gap: var(--gh-gap); height: 1rem; margin: 0 0 0.25rem 1.75rem; font-size: 0.6875rem; line-height: 1; color: rgb(var(--color-neutral-500)); }
+    .gh-graph-months span { grid-row: 1; white-space: nowrap; }
+    .gh-graph-body { display: flex; gap: 0.5rem; align-items: flex-start; }
+    .gh-graph-days { display: grid; grid-template-rows: repeat(7, var(--gh-cell)); gap: var(--gh-gap); width: 1.25rem; flex-shrink: 0; font-size: 0.6875rem; line-height: var(--gh-cell); color: rgb(var(--color-neutral-500)); }
+    .gh-graph-days span { height: var(--gh-cell); }
+    .gh-graph-grid { display: grid; grid-template-rows: repeat(7, var(--gh-cell)); grid-auto-flow: column; grid-auto-columns: var(--gh-cell); gap: var(--gh-gap); flex: 1 1 auto; }
+    .gh-graph-grid .cell { width: var(--gh-cell); height: var(--gh-cell); border-radius: 2px; background: #ebedf0; outline: 1px solid rgb(var(--color-neutral-200) / 0.35); outline-offset: -1px; }
+    .gh-graph-loading { font-size: 0.8125rem; color: rgb(var(--color-neutral-500)); padding: 2rem 0; text-align: center; }
+    .gh-graph[hidden] { display: none; }
 
     .gh-repos-head { display: flex; align-items: baseline; justify-content: space-between; column-gap: 0.75rem; margin-bottom: 1rem; }
     .gh-repos-head h3 { font-size: 1.125rem; line-height: 1.3; font-weight: 600; margin: 0; color: rgb(var(--color-neutral-900)); }
@@ -70,8 +79,17 @@
     <span class="count gh-contrib-count" hidden></span>
   </div>
 
-  <div class="gh-graph">
-    <img src="https://ghchart.rshah.org/{{ $color }}/{{ $username }}" alt="GitHub contribution graph for {{ $username }}" loading="lazy" />
+  <div class="gh-graph" aria-busy="true">
+    <p class="gh-graph-loading">Loading contribution graph…</p>
+    <div class="gh-graph-wrap" hidden>
+      <div class="gh-graph-months" aria-hidden="true"></div>
+      <div class="gh-graph-body">
+        <div class="gh-graph-days" aria-hidden="true">
+          <span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span>
+        </div>
+        <div class="gh-graph-grid" role="img" aria-label="GitHub contribution graph"></div>
+      </div>
+    </div>
   </div>
 
   <div class="gh-repos-head">
@@ -167,19 +185,78 @@
   <script>
     (function (section) {
       var countEl = section.querySelector(".gh-contrib-count");
+      var graphEl = section.querySelector(".gh-graph");
+      var wrapEl = section.querySelector(".gh-graph-wrap");
+      var gridEl = section.querySelector(".gh-graph-grid");
+      var monthsEl = section.querySelector(".gh-graph-months");
+      var loadingEl = section.querySelector(".gh-graph-loading");
       var user = section.dataset.ghUser;
-      if (!countEl || !user) return;
+      if (!user || !graphEl) return;
 
-      fetch("https://github-contributions-api.deno.dev/" + user + ".json")
+      var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+      function formatDate(iso) {
+        var d = new Date(iso + "T12:00:00");
+        return months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+      }
+
+      function renderGraph(weeks) {
+        if (!weeks || !weeks.length || !gridEl) return;
+
+        var frag = document.createDocumentFragment();
+        var monthFrag = document.createDocumentFragment();
+        var lastMonth = -1;
+
+        for (var w = 0; w < weeks.length; w++) {
+          var week = weeks[w];
+          var first = week[0];
+          if (first && first.date) {
+            var m = new Date(first.date + "T12:00:00").getMonth();
+            if (m !== lastMonth) {
+              lastMonth = m;
+              var label = document.createElement("span");
+              label.textContent = months[m];
+              label.style.gridColumn = String(w + 1);
+              monthFrag.appendChild(label);
+            }
+          }
+          for (var d = 0; d < week.length; d++) {
+            var day = week[d];
+            var cell = document.createElement("span");
+            cell.className = "cell";
+            cell.style.backgroundColor = day.color || "#ebedf0";
+            var n = day.contributionCount || 0;
+            cell.title = n + (n === 1 ? " contribution" : " contributions") + " on " + formatDate(day.date);
+            frag.appendChild(cell);
+          }
+        }
+
+        gridEl.replaceChildren(frag);
+        if (monthsEl) monthsEl.replaceChildren(monthFrag);
+        gridEl.setAttribute("aria-label", "GitHub contribution graph for " + user);
+
+        if (loadingEl) loadingEl.hidden = true;
+        if (wrapEl) wrapEl.hidden = false;
+        graphEl.removeAttribute("aria-busy");
+      }
+
+      fetch("https://github-contributions-api.deno.dev/" + encodeURIComponent(user) + ".json")
         .then(function (res) { return res.ok ? res.json() : null; })
         .then(function (data) {
-          var total = data && data.totalContributions;
-          if (total > 0) {
+          if (!data) {
+            if (loadingEl) loadingEl.textContent = "Couldn't load contribution graph.";
+            return;
+          }
+          var total = data.totalContributions;
+          if (total > 0 && countEl) {
             countEl.textContent = total + " contributions in the last year";
             countEl.hidden = false;
           }
+          renderGraph(data.contributions);
         })
-        .catch(function () {});
+        .catch(function () {
+          if (loadingEl) loadingEl.textContent = "Couldn't load contribution graph.";
+        });
     })(document.currentScript.closest(".gh-section"));
   </script>
 </section>
