@@ -1,0 +1,50 @@
+[[main]]
+  name = "Projekte"
+  pageRef = "projects"
+  weight = 10
+
+[[main]]
+  name = "Erfahrung"
+  pageRef = "experience"
+  weight = 20
+
+[[main]]
+  name = "Blog"
+  pageRef = "posts"
+  weight = 30
+
+[[main]]
+  name = "Über mich"
+  pageRef = "about"
+  weight = 40
+
+[[main]]
+  name = "Lebenslauf"
+  pageRef = "resume"
+  weight = 50
+
+[[main]]
+  name = "Kontakt"
+  pageRef = "contact"
+  weight = 60
+
+[[main]]
+  identifier = "search"
+  weight = 99
+  [main.params]
+    action = "search"
+
+[[footer]]
+  name = "GitHub"
+  url = "https://github.com/ashok-cse"
+  weight = 10
+
+[[footer]]
+  name = "LinkedIn"
+  url = "https://linkedin.com/in/ashok-cse"
+  weight = 20
+
+[[footer]]
+  name = "E-Mail"
+  url = "mailto:ashokmarmath8@gmail.com"
+  weight = 30

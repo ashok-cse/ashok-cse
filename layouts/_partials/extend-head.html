@@ -1,0 +1,97 @@
+<script>
+  (function () {
+    var currentIsDe = /^\/de(\/|$)/.test(window.location.pathname);
+
+    function readCookie(name) {
+      var m = document.cookie.match(
+        new RegExp("(?:^|;\\s*)" + name + "=([^;]+)")
+      );
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+
+    function writeCookie(name, value) {
+      var oneYear = 60 * 60 * 24 * 365;
+      document.cookie =
+        name +
+        "=" +
+        value +
+        "; Max-Age=" +
+        oneYear +
+        "; Path=/; SameSite=Lax";
+    }
+
+    function targetIsDe(href) {
+      try {
+        var u = new URL(href, window.location.href);
+        if (u.origin !== window.location.origin) return null;
+        return /^\/de(\/|$)/.test(u.pathname);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    document.addEventListener("click", function (event) {
+      var link = event.target.closest("a[href]");
+      if (!link) return;
+      var targetDe = targetIsDe(link.getAttribute("href"));
+      if (targetDe === null) return;
+      if (targetDe === currentIsDe) return;
+      writeCookie("lang_pref", targetDe ? "de" : "en");
+    });
+
+    if (currentIsDe && readCookie("lang_pref") === "de_auto") {
+      var enPath =
+        window.location.pathname.replace(/^\/de(\/|$)/, "/") +
+        window.location.search;
+
+      var injectBanner = function () {
+        if (document.getElementById("lang-banner")) return;
+        var bar = document.createElement("div");
+        bar.id = "lang-banner";
+        bar.setAttribute("role", "region");
+        bar.setAttribute("aria-label", "Language");
+        bar.style.cssText =
+          "display:flex;align-items:center;justify-content:center;gap:1rem;padding:.6rem 1rem;font-size:.9rem;line-height:1.4;background:#1e293b;color:#f1f5f9;text-align:center;flex-wrap:wrap;";
+        bar.innerHTML =
+          '<span>Sie sehen die deutsche Version.</span>' +
+          '<a href="' +
+          enPath +
+          '" id="lang-banner-en" style="color:#fef3c7;text-decoration:underline;font-weight:600;">View in English</a>' +
+          '<button type="button" id="lang-banner-close" aria-label="Schließen" style="background:transparent;border:0;color:#cbd5e1;font-size:1.1rem;line-height:1;cursor:pointer;padding:0 .25rem;">×</button>';
+        document.body.insertBefore(bar, document.body.firstChild);
+
+        document
+          .getElementById("lang-banner-en")
+          .addEventListener("click", function () {
+            writeCookie("lang_pref", "en");
+          });
+
+        document
+          .getElementById("lang-banner-close")
+          .addEventListener("click", function () {
+            writeCookie("lang_pref", "de");
+            bar.remove();
+          });
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", injectBanner);
+      } else {
+        injectBanner();
+      }
+
+      var downgraded = false;
+      document.addEventListener(
+        "click",
+        function () {
+          if (downgraded) return;
+          downgraded = true;
+          if (readCookie("lang_pref") === "de_auto") {
+            writeCookie("lang_pref", "de");
+          }
+        },
+        { capture: true }
+      );
+    }
+  })();
+</script>
